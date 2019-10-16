@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "59a18680-66ce-478b-a175-6094c0ad7bfe",
+		"name": "Teste2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Calculadora",
+			"item": [
+				{
+					"name": "soma",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d315ca6f-5359-4b06-a3c3-3bd99c7a5caf",
+								"exec": [
+									"postman.setEnvironmentVariable(\"a\", \"5\");",
+									"postman.setEnvironmentVariable(\"b\", \"2\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ae7310db-0dc5-48ef-84a9-54210e6be008",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var retorno = JSON.parse(responseBody).retorno;",
+									"",
+									"pm.test(\"Resultado soma é 7\", function () {",
+									"    pm.expect(retorno).to.eql(7);",
+									"});",
+									"",
+									"pm.environment.set(\"resultadoSoma\",retorno);",
+									"",
+									"postman.setNextRequest(\"multiplica\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/soma/{{a}}/{{b}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"soma",
+								"{{a}}",
+								"{{b}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "multiplica",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2762d6a7-cca8-4b8b-9a65-45efef1baac1",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var retorno = JSON.parse(responseBody).retorno;",
+									"",
+									"pm.test(\"Resultado soma é 28\", function () {",
+									"    pm.expect(retorno).to.eql(28);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/multiplica?a={{resultadoSoma}}&b=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"multiplica"
+							],
+							"query": [
+								{
+									"key": "a",
+									"value": "{{resultadoSoma}}"
+								},
+								{
+									"key": "b",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
